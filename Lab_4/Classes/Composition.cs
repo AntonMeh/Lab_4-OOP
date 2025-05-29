@@ -8,17 +8,17 @@ namespace Lab_4.Classes
     public class Composition : INotifyPropertyChanged
     {
         private int _numOfRoom;
-        private decimal _roomPrice; 
-        private List<ConsignmentOfGoods> _info = new List<ConsignmentOfGoods>(); 
+        private int _roomPrice; 
+        private List<ConsignmentOfGoods> _info = []; 
 
-        public Composition(int numOfRoom, decimal roomPrice, List<ConsignmentOfGoods> info)
+        public Composition(int numOfRoom, int roomPrice, List<ConsignmentOfGoods> info)
         {
             NumOfRoom = numOfRoom; 
             RoomPrice = roomPrice; 
-            Info = info ?? new List<ConsignmentOfGoods>(); 
+            Info = info; 
         }
 
-        public Composition(int numOfRoom, decimal roomPrice)
+        public Composition(int numOfRoom, int roomPrice)
         {
             NumOfRoom = numOfRoom;
             RoomPrice = roomPrice;
@@ -43,7 +43,7 @@ namespace Lab_4.Classes
             }
         }
 
-        public decimal RoomPrice 
+        public int RoomPrice 
         {
             get => _roomPrice;
             set

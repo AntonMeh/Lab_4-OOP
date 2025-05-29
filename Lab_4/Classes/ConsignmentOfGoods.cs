@@ -13,11 +13,11 @@ namespace Lab_4.Classes
         private Vegetables _vegetables;
         private Delivery _typeOfDelivery;
         private int _quantity;
-        private decimal _priceForOne;
-        private decimal _priceForTransport;
+        private int _priceForOne;
+        private int _priceForTransport;
         private DateTime _dateOfDelivery;
 
-        public ConsignmentOfGoods(Vegetables vegetables, Delivery delivery, int quantity, decimal priceForOne, decimal priceForTransport, DateTime dateOfDelivery)
+        public ConsignmentOfGoods(Vegetables vegetables, Delivery delivery, int quantity, int priceForOne, int priceForTransport, DateTime dateOfDelivery)
         {
             Vegetables = vegetables;
             TypeOfDelivery = delivery;
@@ -51,7 +51,7 @@ namespace Lab_4.Classes
                 _quantity = value; OnPropertyChanged(nameof(Quantity));
             }
         }
-        public decimal PriceForOne
+        public int PriceForOne
         {
             get => _priceForOne;
             set
@@ -59,7 +59,7 @@ namespace Lab_4.Classes
                 _priceForOne = value; OnPropertyChanged(nameof(PriceForOne));
             }
         }
-        public decimal PriceForTransport
+        public int PriceForTransport
         {
             get => _priceForTransport;
             set
@@ -79,6 +79,7 @@ namespace Lab_4.Classes
         {
             return (PriceForOne * Quantity) + PriceForTransport;
         }
+        public decimal CurrentTotalCost => TotalCost();
         public override string ToString()
         {
             return $"Vegetable: {Vegetables.Name}, Delivery: {TypeOfDelivery}, Quantity: {Quantity}, Price: {PriceForOne} $, Price for del.: {PriceForTransport} $, Date of del.: {DateOfDelivery:d}";
