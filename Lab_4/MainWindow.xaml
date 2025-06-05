@@ -63,6 +63,14 @@
                     Padding="10"
                     Margin="10,0,10,0"/>
 
+            <Button Content="Delete Composition"
+                    x:Name="deleteCompositionBtn"
+                    IsEnabled="False"
+                    Click="DeleteComposition_Click" FontSize="16"
+                    Cursor="Hand"
+                    Padding="10"
+                    Margin="10,0,10,0"/>
+
             <Button Content="Add New Composition"
                     Click="NewComposition_Click" FontSize="16"
                     Cursor="Hand"

@@ -27,3 +27,7 @@ C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\L
 C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\ViewVegetablesInConsignmentWindow.g.cs
 C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\EditConsignmentWindow.baml
 C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\ViewVegetablesInConsignmentWindow.baml
+C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\AddCompositionWindow.baml
+C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\EditCompositionWindow.baml
+C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\AddCompositionWindow.g.cs
+C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\EditCompositionWindow.g.cs

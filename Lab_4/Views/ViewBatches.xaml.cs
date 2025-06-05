@@ -13,17 +13,9 @@ namespace Lab_4.Views
         {
             InitializeComponent();
             _composition = composition;
-            DataContext = _composition;
+            this.DataContext = _composition;
 
-            compositionHeader.Text = $"Composition №{_composition.NumOfRoom} - Room Price: {_composition.RoomPrice} $";
-        }
-
-        private void ProductBatchesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            bool hasSelection = productBatchesListView.SelectedItem != null;
-            removeBatchBtn.IsEnabled = hasSelection;
-            editBatchBtn.IsEnabled = hasSelection;
-            viewContentsBtn.IsEnabled = hasSelection;
+            productBatchesListView.ItemsSource = _composition.Info;
         }
 
         private void AddBatch_Click(object sender, RoutedEventArgs e)
@@ -35,8 +27,6 @@ namespace Lab_4.Views
                 if (newBatch != null)
                 {
                     _composition.AcceptProductBatch(newBatch);
-                    productBatchesListView.ItemsSource = null;
-                    productBatchesListView.ItemsSource = _composition.Info;
                 }
             }
         }
@@ -46,11 +36,9 @@ namespace Lab_4.Views
             if (productBatchesListView.SelectedItem is ConsignmentOfGoods selectedBatch)
             {
                 var editWindow = new EditConsignmentWindow(selectedBatch);
-                if (editWindow.ShowDialog() == true) 
+                if (editWindow.ShowDialog() == true)
                 {
-                    productBatchesListView.ItemsSource = null;
-                    productBatchesListView.ItemsSource = _composition.Info;
-                } 
+                }
             }
         }
 
@@ -62,20 +50,21 @@ namespace Lab_4.Views
                 if (result == MessageBoxResult.Yes)
                 {
                     _composition.WriteOffProductBatch(selectedBatch);
-
-                    productBatchesListView.ItemsSource = null;
-                    productBatchesListView.ItemsSource = _composition.Info;
                 }
+            }
+        }
+
+        private void EditComposition_Click(object sender, RoutedEventArgs e)
+        {
+            var editWindow = new EditCompositionWindow(_composition);
+            if (editWindow.ShowDialog() == true)
+            {
             }
         }
 
         private void ViewContents_Click(object sender, RoutedEventArgs e)
         {
-            if (productBatchesListView.SelectedItem is ConsignmentOfGoods selectedBatch)
-            {
-                var viewWindow = new ViewVegetablesInConsignmentWindow(selectedBatch.Vegetables);
-                viewWindow.ShowDialog();
-            }
+
         }
     }
 }

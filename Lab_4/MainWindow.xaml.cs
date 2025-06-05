@@ -24,7 +24,7 @@ namespace Lab_4
         }
 
         public MainWindow()
-        {
+        {            
             InitializeComponent();
 
             Compositions = new ObservableCollection<Composition>();
@@ -54,7 +54,8 @@ namespace Lab_4
 
             this.DataContext = this;
 
-            UpdateButtonsBasedOnSelection(); 
+            UpdateButtonsBasedOnSelection();
+
         }
 
         private void CompositionListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -70,6 +71,8 @@ namespace Lab_4
                 viewProductBatchesBtn.IsEnabled = hasSelection;
             if (editCompositionBtn != null)
                 editCompositionBtn.IsEnabled = hasSelection;
+            if (deleteCompositionBtn != null) 
+                deleteCompositionBtn.IsEnabled = hasSelection;
         }
 
         private void ShowProductBatches_Click(object sender, RoutedEventArgs e)
@@ -87,10 +90,47 @@ namespace Lab_4
 
         private void EditComposition_Click(object sender, RoutedEventArgs e)
         {
+            if (compositionListView.SelectedItem is Composition selectedComposition)
+            {
+                var editWindow = new EditCompositionWindow(selectedComposition);
+
+                if (editWindow.ShowDialog() == true)
+                {
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a composition to edit.", "Selection required");
+            }
         }
 
         private void NewComposition_Click(object sender, RoutedEventArgs e)
         {
+            var addCompositionWindow = new AddCompositionWindow();
+
+            if (addCompositionWindow.ShowDialog() == true)
+            {
+                if (addCompositionWindow.NewComposition != null)
+                {
+                    Compositions.Add(addCompositionWindow.NewComposition);
+                    compositionListView.SelectedItem = addCompositionWindow.NewComposition; 
+                }
+            }
+        }
+        private void DeleteComposition_Click(object sender, RoutedEventArgs e)
+        {
+            if (compositionListView.SelectedItem is Composition selectedComposition)
+            {
+                var result = MessageBox.Show($"Are you sure you want to delete Composition (Room No. {selectedComposition.NumOfRoom})?", "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Compositions.Remove(selectedComposition);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a composition to delete.", "Selection required");
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
