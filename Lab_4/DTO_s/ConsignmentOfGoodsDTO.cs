@@ -10,7 +10,7 @@ namespace Lab_4.DTO_s
 {
     public class ConsignmentOfGoodsDTO
     {
-        public Vegetables Vegetables { get; set; }
+        public VegetablesDTO Vegetables { get; set; }
         public Delivery TypeOfDelivery { get; set; }
         public int Quantity { get; set; }
         public int PriceForOne { get; set; }

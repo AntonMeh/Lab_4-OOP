@@ -26,36 +26,17 @@ namespace Lab_4
         public MainWindow()
         {            
             InitializeComponent();
-
-            Compositions = new ObservableCollection<Composition>();
-
-            var carrot = new Vegetables("Carrot", "Ukraine", "Kyiv", 2024);
-            var potato = new Vegetables("Potato", "Poland", "Warsaw", 2024);
-            var tomato = new Vegetables("Tomato", "Turkey", "Antalya", 2025);
-
-            var consignment1 = new ConsignmentOfGoods(carrot, Delivery.Supplier, 50, 75, 15, DateTime.Now.AddDays(-7));
-            var consignment2 = new ConsignmentOfGoods(potato, Delivery.Intermediary, 250, 4, 20, DateTime.Now.AddDays(-10));
-            var consignment3 = new ConsignmentOfGoods(tomato, Delivery.OwnFunds, 150, 10, 5, DateTime.Now.AddDays(-3));
-            var consignment4 = new ConsignmentOfGoods(carrot, Delivery.Supplier, 75, 2, 12, DateTime.Now.AddDays(-1));
-
-            var warehouse1 = new Composition(101, 500);
-            warehouse1.AcceptProductBatch(consignment1);
-            warehouse1.AcceptProductBatch(consignment3);
-
-            var warehouse2 = new Composition(202, 750);
-            warehouse2.AcceptProductBatch(consignment2);
-            warehouse2.AcceptProductBatch(consignment4);
-
-            var warehouse3 = new Composition(303, 300);
-
-            Compositions.Add(warehouse1);
-            Compositions.Add(warehouse2);
-            Compositions.Add(warehouse3);
+            Compositions = App.LoadAllCompositions();
 
             this.DataContext = this;
+            this.Closed += MainWindow_Closed;
 
             UpdateButtonsBasedOnSelection();
 
+        }
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            App.SaveAllCompositions(Compositions);
         }
 
         private void CompositionListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

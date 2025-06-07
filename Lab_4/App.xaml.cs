@@ -14,6 +14,8 @@ namespace Lab_4
 
     public partial class App : Application
     {
+        private const string DataFilePath = "compositions_data.json";
+
         private static readonly JsonSerializerOptions _serializeOptions = new()
         {
             WriteIndented = true,
@@ -24,7 +26,59 @@ namespace Lab_4
             Converters = { new JsonStringEnumConverter() }
         };
 
-        private const string DataFilePath = "compositions_data.json"; 
+        public static void SaveAllCompositions(ObservableCollection<Composition> compositions)
+        {
+            try
+            {
+                List<CompositionDTO> compositionDtos = compositions.Select(c => c.ToDTO()).ToList();
+
+                if (compositionDtos.Count > 0)
+                {
+                    string jsonString = JsonSerializer.Serialize(compositionDtos, _serializeOptions);
+                    File.WriteAllText(DataFilePath, jsonString);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving data: {ex.Message}", "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public static ObservableCollection<Composition> LoadAllCompositions()
+        {
+            var loadedCompositions = new ObservableCollection<Composition>();
+
+            try
+            {
+                var compositionsJson = File.ReadAllText(DataFilePath);
+
+                if (!string.IsNullOrEmpty(compositionsJson))
+                {
+                    var compositionDtos = JsonSerializer.Deserialize<List<CompositionDTO>>(compositionsJson, _deserializeOptions);
+
+                    if (compositionDtos != null)
+                    {
+                        foreach (var dto in compositionDtos)
+                        {
+                            loadedCompositions.Add(Composition.FromDTO(dto));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading data from '{DataFilePath}': {ex.Message}\nInitializing with default data.", "Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            if (loadedCompositions.Count == 0)
+            {
+                MessageBox.Show("No data loaded. Initializing with a minimal default set.", "No Data", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var defaultComposition = new Composition(1, 100);
+                loadedCompositions.Add(defaultComposition);
+            }
+
+            return loadedCompositions;
+        }
 
     }
 

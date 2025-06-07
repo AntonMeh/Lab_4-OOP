@@ -61,10 +61,34 @@ namespace Lab_4.Views
             {
             }
         }
+        private void ProductBatchesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateButtonsBasedOnSelection();
+        }
+
+        private void UpdateButtonsBasedOnSelection()
+        {
+            bool hasSelection = productBatchesListView.SelectedItem != null;
+
+            if (editBatchBtn != null) 
+                editBatchBtn.IsEnabled = hasSelection;
+            if(viewContentsBtn != null)
+                viewContentsBtn.IsEnabled = hasSelection;
+            if (removeBatchBtn != null) 
+                removeBatchBtn.IsEnabled = hasSelection;
+        }
 
         private void ViewContents_Click(object sender, RoutedEventArgs e)
         {
-
+            if (productBatchesListView.SelectedItem is ConsignmentOfGoods selectedBatch)
+            {
+                var editVegetableWindow = new ViewVegetablesInConsignmentWindow(selectedBatch.Vegetables); 
+                editVegetableWindow.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Please select a product batch to view its contents.", "Selection required", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

@@ -31,3 +31,5 @@ C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\L
 C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\EditCompositionWindow.baml
 C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\AddCompositionWindow.g.cs
 C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Views\EditCompositionWindow.g.cs
+C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\bin\Debug\net8.0-windows\compositions_data.json
+C:\Users\ameh0\OneDrive\Рабочий стол\купси\C#\2 курс\Sem 2\Lab_4\Lab_4\obj\Debug\net8.0-windows\Lab_4_Content.g.cs

@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Lab_4.DTO_s;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+
 
 namespace Lab_4.Classes
 {
@@ -21,6 +24,10 @@ namespace Lab_4.Classes
             CountryOfOrigin = countryOfOrigin;
             City = city;
             Season = season;
+        }
+        public Vegetables() 
+        {
+
         }
         public string Name
         {
@@ -50,6 +57,7 @@ namespace Lab_4.Classes
                 OnPropertyChanged(nameof(City));
             }
         }
+        
         public int Season
         {
             get => _season;
@@ -71,6 +79,28 @@ namespace Lab_4.Classes
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToString)));
+        }
+        public VegetablesDTO ToDTO()
+        {
+            return new VegetablesDTO
+            {
+                Name = this.Name,
+                CountryOfOrigin = this.CountryOfOrigin,
+                City = this.City,
+                Season = this.Season
+            };
+        }
+
+        public static Vegetables FromDTO(VegetablesDTO dto)
+        {
+            if (dto == null) return null;
+            return new Vegetables
+            {
+                Name = dto.Name,
+                CountryOfOrigin = dto.CountryOfOrigin,
+                City = dto.City,
+                Season = dto.Season
+            };
         }
     }
 }

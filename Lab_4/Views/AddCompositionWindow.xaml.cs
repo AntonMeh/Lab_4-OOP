@@ -38,7 +38,7 @@ namespace Lab_4.Views
                 }
 
                 NewComposition = new Composition(roomNum, roomPrice);
-                this.DialogResult = true; // Вказуємо, що дія виконана успішно
+                this.DialogResult = true; 
                 this.Close();
             }
             catch (ArgumentException ex)
@@ -53,7 +53,7 @@ namespace Lab_4.Views
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false; // Вказуємо, що дія скасована
+            this.DialogResult = false; 
             this.Close();
         }
     }

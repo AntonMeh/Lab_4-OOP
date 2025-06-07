@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Lab_4.DTO_s;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel; 
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;         
 
 namespace Lab_4.Classes 
@@ -9,9 +12,9 @@ namespace Lab_4.Classes
     {
         private int _numOfRoom;
         private int _roomPrice; 
-        private List<ConsignmentOfGoods> _info = []; 
+        private ObservableCollection<ConsignmentOfGoods> _info; 
 
-        public Composition(int numOfRoom, int roomPrice, List<ConsignmentOfGoods> info)
+        public Composition(int numOfRoom, int roomPrice, ObservableCollection<ConsignmentOfGoods> info)
         {
             NumOfRoom = numOfRoom; 
             RoomPrice = roomPrice; 
@@ -22,18 +25,18 @@ namespace Lab_4.Classes
         {
             NumOfRoom = numOfRoom;
             RoomPrice = roomPrice;
-            _info = new List<ConsignmentOfGoods>();
+        }
+        public Composition()
+        {
+            _info = new ObservableCollection<ConsignmentOfGoods>();
         }
 
+        [Range(1, int.MaxValue, ErrorMessage = "Room number must be a positive number.")]
         public int NumOfRoom
         {
             get => _numOfRoom;
             set
             {
-                if (value <= 0)
-                {
-                    throw new ArgumentException("Room number must be a positive number.", nameof(NumOfRoom));
-                }
                 if (_numOfRoom != value)
                 {
                     _numOfRoom = value;
@@ -43,6 +46,7 @@ namespace Lab_4.Classes
             }
         }
 
+        [Range(1, int.MaxValue, ErrorMessage = "Room price must be greater than 0.")]
         public int RoomPrice 
         {
             get => _roomPrice;
@@ -60,7 +64,7 @@ namespace Lab_4.Classes
             }
         }
 
-        public List<ConsignmentOfGoods> Info
+        public ObservableCollection<ConsignmentOfGoods> Info
         {
             get => _info;
             set
@@ -133,6 +137,36 @@ namespace Lab_4.Classes
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToString)));
+        }
+
+        public CompositionDTO ToDTO()
+        {
+            return new CompositionDTO
+            {
+                NumOfRoom = this.NumOfRoom,
+                RoomPrice = this.RoomPrice,
+                InfoOfGoods = this.Info?.Select(c => c.ToDTO()).ToList() 
+            };
+        }
+
+        public static Composition FromDTO(CompositionDTO dto)
+        {
+            if (dto == null) return null;   
+
+            var composition = new Composition 
+            {
+                NumOfRoom = dto.NumOfRoom,
+                RoomPrice = dto.RoomPrice
+            };
+
+            if (dto.InfoOfGoods != null)
+            {
+                foreach (var consignmentDto in dto.InfoOfGoods)
+                {
+                    composition.AcceptProductBatch(ConsignmentOfGoods.FromDTO(consignmentDto)); 
+                }
+            }
+            return composition;
         }
     }
 }

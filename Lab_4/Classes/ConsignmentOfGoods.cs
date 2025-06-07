@@ -1,7 +1,9 @@
-﻿using Lab_4.Enum;
+﻿using Lab_4.DTO_s;
+using Lab_4.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +28,10 @@ namespace Lab_4.Classes
             PriceForTransport= priceForTransport;
             DateOfDelivery= dateOfDelivery;
         }
+        public ConsignmentOfGoods() 
+        {
 
+        }
         public Vegetables Vegetables
         {
             get => _vegetables;
@@ -43,6 +48,8 @@ namespace Lab_4.Classes
                 _typeOfDelivery = value; OnPropertyChanged(nameof(TypeOfDelivery));
             }
         }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a positive number.")]
         public int Quantity
         {
             get => _quantity;
@@ -51,6 +58,8 @@ namespace Lab_4.Classes
                 _quantity = value; OnPropertyChanged(nameof(Quantity));
             }
         }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Price for one must be a positive number.")]
         public int PriceForOne
         {
             get => _priceForOne;
@@ -59,6 +68,8 @@ namespace Lab_4.Classes
                 _priceForOne = value; OnPropertyChanged(nameof(PriceForOne));
             }
         }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Price for transport must be a positive number.")]
         public int PriceForTransport
         {
             get => _priceForTransport;
@@ -90,6 +101,33 @@ namespace Lab_4.Classes
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToString)));
+        }
+
+        public ConsignmentOfGoodsDTO ToDTO()
+        {
+            return new ConsignmentOfGoodsDTO
+            {
+                Vegetables = this.Vegetables?.ToDTO(), 
+                TypeOfDelivery = this.TypeOfDelivery,
+                Quantity = this.Quantity,
+                PriceForOne = this.PriceForOne,
+                PriceForTransport = this.PriceForTransport,
+                DateOfDelivery = this.DateOfDelivery
+            };
+        }
+
+        public static ConsignmentOfGoods FromDTO(ConsignmentOfGoodsDTO dto)
+        {
+            if (dto == null) return null;
+            return new ConsignmentOfGoods
+            {
+                Vegetables = Vegetables.FromDTO(dto.Vegetables), 
+                TypeOfDelivery = dto.TypeOfDelivery,
+                Quantity = dto.Quantity,
+                PriceForOne = dto.PriceForOne,
+                PriceForTransport = dto.PriceForTransport,
+                DateOfDelivery = dto.DateOfDelivery
+            };
         }
     }
 }
