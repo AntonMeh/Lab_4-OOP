@@ -29,6 +29,7 @@ namespace Lab_4.Classes
         {
 
         }
+        [Required(ErrorMessage = "Name is required.")]
         public string Name
         {
             get => _name;
@@ -38,6 +39,7 @@ namespace Lab_4.Classes
                 OnPropertyChanged(nameof(Name));     
             }
         }
+        [Required(ErrorMessage = "Country of origin is required.")]
         public string CountryOfOrigin
         {
             get => _countryOfOrigin;
@@ -48,6 +50,7 @@ namespace Lab_4.Classes
             }
         }
 
+        [Required(ErrorMessage = "City is required.")]
         public string City
         {
             get => _city;
@@ -58,6 +61,8 @@ namespace Lab_4.Classes
             }
         }
         
+        [Required(ErrorMessage = "Season is required.")]
+        [Range(1990, 2025, ErrorMessage = "Season must be between 1990 and 2025.")]
         public int Season
         {
             get => _season;

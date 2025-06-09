@@ -23,10 +23,10 @@ namespace Lab_4.Classes
         {
             Vegetables = vegetables;
             TypeOfDelivery = delivery;
-            Quantity= quantity;
-            PriceForOne= priceForOne;
-            PriceForTransport= priceForTransport;
-            DateOfDelivery= dateOfDelivery;
+            Quantity = quantity;
+            PriceForOne = priceForOne;
+            PriceForTransport = priceForTransport;
+            DateOfDelivery = dateOfDelivery;
         }
         public ConsignmentOfGoods() 
         {
@@ -49,33 +49,51 @@ namespace Lab_4.Classes
             }
         }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a positive number.")]
+        [Required(ErrorMessage = "Quantity is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Quantity cannot be negative.")]
         public int Quantity
         {
             get => _quantity;
             set
             { 
-                _quantity = value; OnPropertyChanged(nameof(Quantity));
+                if (value < 0)
+                {
+                    throw new ArgumentException("Quantity cannot be negative.", nameof(Quantity));
+                }
+                _quantity = value; 
+                OnPropertyChanged(nameof(Quantity));
             }
         }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Price for one must be a positive number.")]
+        [Required(ErrorMessage = "Price for one item is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Price for one item cannot be negative.")]
         public int PriceForOne
         {
             get => _priceForOne;
             set
             {
-                _priceForOne = value; OnPropertyChanged(nameof(PriceForOne));
+                if (value < 0)
+                {
+                    throw new ArgumentException("Price for one item cannot be negative.", nameof(PriceForOne));
+                }
+                _priceForOne = value; 
+                OnPropertyChanged(nameof(PriceForOne));
             }
         }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Price for transport must be a positive number.")]
+        [Required(ErrorMessage = "Transport price is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Transport price cannot be negative.")]
         public int PriceForTransport
         {
             get => _priceForTransport;
             set
             {
-                _priceForTransport = value; OnPropertyChanged(nameof(PriceForTransport));
+                if (value < 0)
+                {
+                    throw new ArgumentException("Transport price cannot be negative.", nameof(PriceForTransport));
+                }
+                _priceForTransport = value; 
+                OnPropertyChanged(nameof(PriceForTransport));
             }
         }
         public DateTime DateOfDelivery

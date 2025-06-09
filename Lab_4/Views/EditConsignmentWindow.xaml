@@ -6,7 +6,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:local="clr-namespace:Lab_4.Classes"      xmlns:enums="clr-namespace:Lab_4.Enum"         mc:Ignorable="d"
         Title="Edit Product Batch" Height="700" Width="400">
 
-    <Grid Margin="15">
+     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="*"/>   <RowDefinition Height="Auto"/> </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>

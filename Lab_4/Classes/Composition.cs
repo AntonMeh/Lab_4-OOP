@@ -12,7 +12,7 @@ namespace Lab_4.Classes
     {
         private int _numOfRoom;
         private int _roomPrice; 
-        private ObservableCollection<ConsignmentOfGoods> _info; 
+        private ObservableCollection<ConsignmentOfGoods> _info = new ObservableCollection<ConsignmentOfGoods>(); 
 
         public Composition(int numOfRoom, int roomPrice, ObservableCollection<ConsignmentOfGoods> info)
         {
@@ -28,10 +28,12 @@ namespace Lab_4.Classes
         }
         public Composition()
         {
-            _info = new ObservableCollection<ConsignmentOfGoods>();
+            _info.CollectionChanged += (sender, e) => OnPropertyChanged(nameof(ShortString));
+            _info.CollectionChanged += (sender, e) => OnPropertyChanged(nameof(Info));
         }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Room number must be a positive number.")]
+        [Required(ErrorMessage = "Room number is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Room number must be greater than 0.")]
         public int NumOfRoom
         {
             get => _numOfRoom;
@@ -46,7 +48,8 @@ namespace Lab_4.Classes
             }
         }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Room price must be greater than 0.")]
+        [Required(ErrorMessage = "Room price is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Room price cannot be negative.")]
         public int RoomPrice 
         {
             get => _roomPrice;
