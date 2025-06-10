@@ -1,60 +1,44 @@
 ﻿using Lab_4.Classes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Lab_4.Views
 {
     public partial class EditCompositionWindow : Window
     {
-        private Composition _compositionToEdit;
+        private Composition _originalComposition;
+        public Composition _compositionToEdit;
 
         public EditCompositionWindow(Composition composition)
         {
             InitializeComponent();
-            _compositionToEdit = composition;
-
-            roomNumTextBox.Text = _compositionToEdit.NumOfRoom.ToString();
-            roomPriceTextBox.Text = _compositionToEdit.RoomPrice.ToString();
+            _originalComposition = composition ?? throw new ArgumentNullException(nameof(composition));
+            _compositionToEdit = _originalComposition.Clone(); 
+            this.DataContext = _compositionToEdit; 
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            BindingExpression beNum = roomNumTextBox.GetBindingExpression(TextBox.TextProperty);
+            beNum?.UpdateSource();
+
+            BindingExpression bePrice = roomPriceTextBox.GetBindingExpression(TextBox.TextProperty);
+            bePrice?.UpdateSource();
+
+            if (CheckValidation()) 
             {
-                if (string.IsNullOrWhiteSpace(roomNumTextBox.Text) || !int.TryParse(roomNumTextBox.Text, out int roomNum))
-                {
-                    throw new ArgumentException("Please enter a valid number for Room Number.");
-                }
-
-                if (string.IsNullOrWhiteSpace(roomPriceTextBox.Text) || !int.TryParse(roomPriceTextBox.Text, out int roomPrice))
-                {
-                    throw new ArgumentException("Please enter a valid number for Room Price.");
-                }
-
-                _compositionToEdit.NumOfRoom = roomNum;
-                _compositionToEdit.RoomPrice = roomPrice;
+                _originalComposition.NumOfRoom = _compositionToEdit.NumOfRoom;
+                _originalComposition.RoomPrice = _compositionToEdit.RoomPrice;
 
                 DialogResult = true;
                 Close();
             }
-            catch (ArgumentException ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Input Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("The entered data is invalid. Please correct the errors.", "Validation error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -62,6 +46,16 @@ namespace Lab_4.Views
         {
             DialogResult = false;
             Close();
+        }
+
+        private bool CheckValidation()
+        {
+            bool uiHasErrors = Validation.GetHasError(roomNumTextBox) ||
+                               Validation.GetHasError(roomPriceTextBox);
+
+            bool modelHasErrors = !string.IsNullOrEmpty(((IDataErrorInfo)_compositionToEdit).Error);
+
+            return !uiHasErrors && !modelHasErrors;
         }
     }
 }

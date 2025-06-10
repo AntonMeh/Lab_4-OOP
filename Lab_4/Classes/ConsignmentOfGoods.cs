@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Lab_4.Classes
 {
-    public class ConsignmentOfGoods : INotifyPropertyChanged
+    public class ConsignmentOfGoods : INotifyPropertyChanged, IDataErrorInfo
     {
         private Vegetables _vegetables;
         private Delivery _typeOfDelivery;
@@ -28,10 +28,21 @@ namespace Lab_4.Classes
             PriceForTransport = priceForTransport;
             DateOfDelivery = dateOfDelivery;
         }
-        public ConsignmentOfGoods() 
-        {
+        public ConsignmentOfGoods() { }
 
+        public ConsignmentOfGoods Clone()
+        {
+            return new ConsignmentOfGoods
+            {
+                Vegetables = this.Vegetables.Clone(),
+                TypeOfDelivery = this.TypeOfDelivery,
+                Quantity = this.Quantity,
+                PriceForOne = this.PriceForOne,
+                PriceForTransport = this.PriceForTransport,
+                DateOfDelivery = this.DateOfDelivery,
+            };
         }
+        [Required(ErrorMessage = "Vegetables is required.")]
         public Vegetables Vegetables
         {
             get => _vegetables;
@@ -50,48 +61,33 @@ namespace Lab_4.Classes
         }
 
         [Required(ErrorMessage = "Quantity is required.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Quantity cannot be negative.")]
         public int Quantity
         {
             get => _quantity;
             set
             { 
-                if (value < 0)
-                {
-                    throw new ArgumentException("Quantity cannot be negative.", nameof(Quantity));
-                }
                 _quantity = value; 
                 OnPropertyChanged(nameof(Quantity));
             }
         }
 
         [Required(ErrorMessage = "Price for one item is required.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Price for one item cannot be negative.")]
         public int PriceForOne
         {
             get => _priceForOne;
             set
             {
-                if (value < 0)
-                {
-                    throw new ArgumentException("Price for one item cannot be negative.", nameof(PriceForOne));
-                }
                 _priceForOne = value; 
                 OnPropertyChanged(nameof(PriceForOne));
             }
         }
 
         [Required(ErrorMessage = "Transport price is required.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Transport price cannot be negative.")]
         public int PriceForTransport
         {
             get => _priceForTransport;
             set
             {
-                if (value < 0)
-                {
-                    throw new ArgumentException("Transport price cannot be negative.", nameof(PriceForTransport));
-                }
                 _priceForTransport = value; 
                 OnPropertyChanged(nameof(PriceForTransport));
             }
@@ -119,6 +115,73 @@ namespace Lab_4.Classes
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToString)));
+        }
+        public string Error
+        {
+            get
+            {
+                var context = new ValidationContext(this);
+                var results = new List<ValidationResult>();
+                Validator.TryValidateObject(this, context, results, true);
+
+                var quantityError = this[nameof(Quantity)];
+                if (!string.IsNullOrEmpty(quantityError))
+                    results.Add(new ValidationResult(quantityError, new[] { nameof(Quantity) }));
+
+                var priceForOneError = this[nameof(PriceForOne)];
+                if (!string.IsNullOrEmpty(priceForOneError))
+                    results.Add(new ValidationResult(priceForOneError, new[] { nameof(PriceForOne) }));
+
+                var priceForTransportError = this[nameof(PriceForTransport)];
+                if (!string.IsNullOrEmpty(priceForTransportError))
+                    results.Add(new ValidationResult(priceForTransportError, new[] { nameof(PriceForTransport) }));
+
+                if (Vegetables != null)
+                {
+                    var vegError = ((IDataErrorInfo)Vegetables).Error;
+                    if (!string.IsNullOrEmpty(vegError))
+                        results.Add(new ValidationResult($"Error in vegetable data: {vegError}"));
+                }
+
+                return string.Join("\n", results.Select(r => r.ErrorMessage));
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                if (columnName == nameof(Quantity))
+                {
+                    if (Quantity <= 0)
+                        return "The number must be greater than 0.";
+                }
+                else if (columnName == nameof(PriceForOne))
+                {
+                    if (PriceForOne < 0)
+                        return "The price per unit cannot be negative.";
+                }
+                else if (columnName == nameof(PriceForTransport))
+                {
+                    if (PriceForTransport < 0)
+                        return "The cost of transportation cannot be negative.";
+                }
+                else if (columnName == nameof(Vegetables))
+                {
+                    if (Vegetables == null)
+                        return "No information about vegetables is available.";
+                    var vegError = ((IDataErrorInfo)Vegetables).Error;
+                    if (!string.IsNullOrEmpty(vegError))
+                        return $"Error in vegetable data: {vegError}";
+                }
+                else if (columnName == nameof(DateOfDelivery))
+                {
+                    if (DateOfDelivery.Date < DateTime.Today.Date)
+                        return "The delivery date cannot be in the past.";
+                }
+
+                return string.Empty;
+            }
         }
 
         public ConsignmentOfGoodsDTO ToDTO()

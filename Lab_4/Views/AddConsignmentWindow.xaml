@@ -4,16 +4,50 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:Lab_4.Classes" xmlns:enums="clr-namespace:Lab_4.Enum"   mc:Ignorable="d"
-        Title="Add New Product Batch" Height="500" Width="400">
+        xmlns:local="clr-namespace:Lab_4.Classes"
+        xmlns:enums="clr-namespace:Lab_4.Enum"
+        mc:Ignorable="d"
+        Title="Add New Product Batch" Height="500" Width="400"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ObjectDataProvider MethodName="GetValues"
-                        ObjectType="{x:Type sys:Enum}"
-                        x:Key="DeliveryEnumValues">
+                            ObjectType="{x:Type sys:Enum}"
+                            x:Key="DeliveryEnumValues">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="enums:Delivery"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        <!-- Simple error tooltip style -->
+        <Style TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}, 
+                                            Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type ComboBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}, 
+                                            Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type DatePicker}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}, 
+                                            Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Grid Margin="15">
@@ -36,38 +70,46 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Text="Vegetable Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
-        <TextBox x:Name="vegetableNameTextBox" Grid.Row="0" Grid.Column="1" Margin="5"/>
+        <TextBox x:Name="vegetableNameTextBox" Grid.Row="0" Grid.Column="1" Margin="5"
+                 Text="{Binding NewConsignment.Vegetables.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Country Of Origin:" Grid.Row="1" Grid.Column="0" Margin="5"/>
-        <TextBox x:Name="countryOfOriginTextBox" Grid.Row="1" Grid.Column="1" Margin="5"/>
+        <TextBox x:Name="countryOfOriginTextBox" Grid.Row="1" Grid.Column="1" Margin="5"
+                 Text="{Binding NewConsignment.Vegetables.CountryOfOrigin, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="City:" Grid.Row="2" Grid.Column="0" Margin="5"/>
-        <TextBox x:Name="cityTextBox" Grid.Row="2" Grid.Column="1" Margin="5"/>
+        <TextBox x:Name="cityTextBox" Grid.Row="2" Grid.Column="1" Margin="5"
+                 Text="{Binding NewConsignment.Vegetables.City, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Season:" Grid.Row="3" Grid.Column="0" Margin="5"/>
-        <TextBox x:Name="seasonTextBox" Grid.Row="3" Grid.Column="1" Margin="5"/>
+        <TextBox x:Name="seasonTextBox" Grid.Row="3" Grid.Column="1" Margin="5"
+                 Text="{Binding NewConsignment.Vegetables.Season, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Delivery Type:" Grid.Row="4" Grid.Column="0" Margin="5"/>
         <ComboBox x:Name="deliveryTypeComboBox"
-          Grid.Row="4"
-          Grid.Column="1"
-          Margin="5"
-          ItemsSource="{Binding Source={StaticResource DeliveryEnumValues}}"
-          SelectedItem="{Binding NewConsignment.TypeOfDelivery}" />
+                  Grid.Row="4"
+                  Grid.Column="1"
+                  Margin="5"
+                  ItemsSource="{Binding Source={StaticResource DeliveryEnumValues}}"
+                  SelectedItem="{Binding NewConsignment.TypeOfDelivery, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Quantity:" Grid.Row="5" Grid.Column="0" Margin="5"/>
-        <TextBox x:Name="quantityTextBox" Grid.Row="5" Grid.Column="1" Margin="5"/>
+        <TextBox x:Name="quantityTextBox" Grid.Row="5" Grid.Column="1" Margin="5"
+                 Text="{Binding NewConsignment.Quantity, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Price Per Unit:" Grid.Row="6" Grid.Column="0" Margin="5"/>
-        <TextBox x:Name="pricePerOneTextBox" Grid.Row="6" Grid.Column="1" Margin="5"/>
+        <TextBox x:Name="pricePerOneTextBox" Grid.Row="6" Grid.Column="1" Margin="5"
+                 Text="{Binding NewConsignment.PriceForOne, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Transport Cost:" Grid.Row="7" Grid.Column="0" Margin="5"/>
-        <TextBox x:Name="priceForTransportTextBox" Grid.Row="7" Grid.Column="1" Margin="5"/>
+        <TextBox x:Name="priceForTransportTextBox" Grid.Row="7" Grid.Column="1" Margin="5"
+                 Text="{Binding NewConsignment.PriceForTransport, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBlock Text="Delivery Date:" Grid.Row="8" Grid.Column="0" Margin="5"/>
-        <DatePicker x:Name="deliveryDatePicker" Grid.Row="8" Grid.Column="1" Margin="5"/>
+        <DatePicker x:Name="deliveryDatePicker" Grid.Row="8" Grid.Column="1" Margin="5"
+                    SelectedDate="{Binding NewConsignment.DateOfDelivery, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <StackPanel Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" 
+        <StackPanel Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"
                     HorizontalAlignment="Right" Margin="0,15,0,0">
             <Button Content="Add Batch"
                     x:Name="addBatchButton"

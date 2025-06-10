@@ -14,7 +14,7 @@
         "Quantity": 50,
         "PriceForOne": 75,
         "PriceForTransport": 15,
-        "DateOfDelivery": "2024-05-31T00:00:00"
+        "DateOfDelivery": "2025-05-31T00:00:00"
       },
       {
         "Vegetables": {
@@ -27,7 +27,7 @@
         "Quantity": 150,
         "PriceForOne": 10,
         "PriceForTransport": 5,
-        "DateOfDelivery": "2024-06-04T00:00:00"
+        "DateOfDelivery": "2025-06-04T00:00:00"
       }
     ]
   },
@@ -46,7 +46,7 @@
         "Quantity": 250,
         "PriceForOne": 4,
         "PriceForTransport": 20,
-        "DateOfDelivery": "2024-05-28T00:00:00"
+        "DateOfDelivery": "2025-05-28T00:00:00"
       },
       {
         "Vegetables": {

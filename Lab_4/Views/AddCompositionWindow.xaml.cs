@@ -5,12 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Lab_4.Classes;
 
 namespace Lab_4.Views
@@ -18,43 +12,38 @@ namespace Lab_4.Views
     public partial class AddCompositionWindow : Window
     {
         public Composition NewComposition { get; private set; }
+        private bool _cancelled = false; 
 
         public AddCompositionWindow()
         {
             InitializeComponent();
+
+            NewComposition = new Composition();
+            this.DataContext = NewComposition;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (CheckValidation()) 
             {
-                if (!int.TryParse(roomNumTextBox.Text, out int roomNum))
-                {
-                    throw new ArgumentException("Please enter a valid number for Room Number.");
-                }
-                if (!int.TryParse(roomPriceTextBox.Text, out int roomPrice))
-                {
-                    throw new ArgumentException("Please enter a valid number for Room Price.");
-                }
-
-                NewComposition = new Composition(roomNum, roomPrice);
-                this.DialogResult = true; 
-                this.Close();
+                this.DialogResult = true;
             }
-            catch (ArgumentException ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Input Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Введені дані не валідні", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false; 
+            _cancelled = true; 
+            this.DialogResult = false;
             this.Close();
+        }
+
+        private bool CheckValidation()
+        {
+            return !Validation.GetHasError(roomNumTextBox) &&
+                   !Validation.GetHasError(roomPriceTextBox);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Lab_4.Classes;
-using Lab_4.Enum; 
+using Lab_4.Enum;
 using System;
+using System.ComponentModel; 
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,69 +9,66 @@ namespace Lab_4.Views
 {
     public partial class EditConsignmentWindow : Window
     {
-        private ConsignmentOfGoods _consignment;
+        private ConsignmentOfGoods _originalConsignment;
+        public ConsignmentOfGoods _consignmentToEdit;
 
         public EditConsignmentWindow(ConsignmentOfGoods consignment)
         {
             InitializeComponent();
-            _consignment = consignment;
+            _originalConsignment = consignment ?? throw new ArgumentNullException(nameof(consignment));
+            _consignmentToEdit = _originalConsignment.Clone();
+            this.DataContext = _consignmentToEdit;
 
             deliveryTypeComboBox.ItemsSource = System.Enum.GetValues(typeof(Delivery));
 
-            PopulateFields();
-        }
-
-        private void PopulateFields()
-        {
-            vegetableNameTextBox.Text = _consignment.Vegetables.Name;
-            countryOfOriginTextBox.Text = _consignment.Vegetables.CountryOfOrigin;
-            cityTextBox.Text = _consignment.Vegetables.City;
-            seasonTextBox.Text = _consignment.Vegetables.Season.ToString();
-
-            deliveryTypeComboBox.SelectedItem = _consignment.TypeOfDelivery;
-
-            quantityTextBox.Text = _consignment.Quantity.ToString();
-            pricePerOneTextBox.Text = _consignment.PriceForOne.ToString();
-            priceForTransportTextBox.Text = _consignment.PriceForTransport.ToString();
-            deliveryDatePicker.SelectedDate = _consignment.DateOfDelivery;
+            deliveryTypeComboBox.SelectedItem = _consignmentToEdit.TypeOfDelivery;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (CheckValidation())
             {
-                _consignment.Vegetables.Name = vegetableNameTextBox.Text;
-                _consignment.Vegetables.CountryOfOrigin = countryOfOriginTextBox.Text;
-                _consignment.Vegetables.City = cityTextBox.Text;
-                _consignment.Vegetables.Season = int.Parse(seasonTextBox.Text); 
+                _originalConsignment.Vegetables.Name = _consignmentToEdit.Vegetables.Name;
+                _originalConsignment.Vegetables.CountryOfOrigin = _consignmentToEdit.Vegetables.CountryOfOrigin;
+                _originalConsignment.Vegetables.City = _consignmentToEdit.Vegetables.City;
+                _originalConsignment.Vegetables.Season = _consignmentToEdit.Vegetables.Season;
 
-                _consignment.TypeOfDelivery = (Delivery)deliveryTypeComboBox.SelectedItem;
-                _consignment.Quantity = int.Parse(quantityTextBox.Text);
-                _consignment.PriceForOne = int.Parse(pricePerOneTextBox.Text);
-                _consignment.PriceForTransport = int.Parse(priceForTransportTextBox.Text);
-                _consignment.DateOfDelivery = deliveryDatePicker.SelectedDate ?? DateTime.Today;
+                _originalConsignment.TypeOfDelivery = _consignmentToEdit.TypeOfDelivery;
+                _originalConsignment.Quantity = _consignmentToEdit.Quantity;
+                _originalConsignment.PriceForOne = _consignmentToEdit.PriceForOne;
+                _originalConsignment.PriceForTransport = _consignmentToEdit.PriceForTransport;
+                _originalConsignment.DateOfDelivery = _consignmentToEdit.DateOfDelivery;
 
-                this.DialogResult = true; 
-                this.Close();
+                DialogResult = true;
+                Close();
             }
-            catch (FormatException)
+            else
             {
-                MessageBox.Show("Please enter valid numbers in numeric fields (Quantity, Price, Transport, Season).", "Format Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show($"Validation Error: {ex.Message}", "Input Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("The entered data is invalid. Please correct the errors..", "Validation error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = false;
+            Close();
+        }
+
+        private bool CheckValidation()
+        {
+            bool uiHasErrors =
+                Validation.GetHasError(vegetableNameTextBox) ||
+                Validation.GetHasError(countryOfOriginTextBox) ||
+                Validation.GetHasError(cityTextBox) ||
+                Validation.GetHasError(seasonTextBox) ||
+                Validation.GetHasError(quantityTextBox) ||
+                Validation.GetHasError(pricePerOneTextBox) ||
+                Validation.GetHasError(priceForTransportTextBox) ||
+                Validation.GetHasError(deliveryDatePicker);
+
+            bool modelHasErrors = !string.IsNullOrEmpty(((IDataErrorInfo)_consignmentToEdit).Error);
+
+            return !uiHasErrors && !modelHasErrors;
         }
     }
 }
